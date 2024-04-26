@@ -1,24 +1,42 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import '../styles.css';
+import { getAllNotes, addNote, removeNote } from '../services/operationNotes.js'; // Ensure the path is correctly set
 
 function Notes() {
-    const notes = [
-        { id: 1, etudiantNom: 'Jean Durand', matiere: 'Mathématiques', note: 15, date: '2023-10-01' },
-        { id: 2, etudiantNom: 'Marie Petit', matiere: 'Informatique', note: 18, date: '2023-10-01' },
-        { id: 3, etudiantNom: 'Marc Leroy', matiere: 'Physique', note: 12, date: '2023-10-01' }
-    ];
+    const [notes, setNotes] = useState([]);
 
-    const handleAdd = () => {
-        console.log('Ajouter Note');
+    useEffect(() => {
+        fetchNotes();
+    }, []);
+
+    const fetchNotes = async () => {
+        await getAllNotes((res) => {
+            if (res.status === 200) {
+                console.log(res.data);
+                setNotes(res.data);
+            } else {
+                console.error('Failed to fetch notes', res.error);
+            }
+        });
     };
 
-    const handleEdit = (id) => {
-        console.log('Modifier Note', id);
+    const handleAdd = async () => {
+        const newNote = {
+            etudiantNom: 'Nouvel Étudiant',
+            matiere: 'Nouvelle Matière',
+            note: 10,
+            date: new Date()
+        };
+        addNote(newNote, () => {
+            fetchNotes();
+        });
     };
 
     const handleDelete = (id) => {
-        console.log('Supprimer Note', id);
+        removeNote(id, () => {
+            fetchNotes();
+        });
     };
 
     return (
@@ -46,14 +64,14 @@ function Notes() {
                 </thead>
                 <tbody>
                 {notes.map(note => (
-                    <tr key={note.id}>
-                        <td className="td">{note.etudiantNom}</td>
+                    <tr key={note._id}>
+                        <td className="td">{note["Prénom"] + note.Nom}</td>
                         <td className="td">{note.matiere}</td>
                         <td className="td">{note.note}</td>
-                        <td className="td">{note.date}</td>
+                        <td className="td">{new Date(note.date).toLocaleDateString('fr-FR')}</td>
                         <td className="td">
-                            <button onClick={() => handleEdit(note.id)} className="button">Modifier</button>
-                            <button onClick={() => handleDelete(note.id)} className="button">Supprimer</button>
+                            <button className="button">Modifier</button>
+                            <button onClick={() => handleDelete(note._id)} className="button">Supprimer</button>
                         </td>
                     </tr>
                 ))}

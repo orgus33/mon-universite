@@ -1,24 +1,42 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import '../styles.css';
+import { getAllEnseignants, addEnseignant, removeEnseignant } from '../services/operationEnseignants'; // Adjust import paths as necessary
 
 function Enseignants() {
-    const enseignants = [
-        { id: 1, nom: 'Dupont', prenom: 'Jacques', specialite: 'Mathématiques', email: 'j.dupont@univ.edu' },
-        { id: 2, nom: 'Lambert', prenom: 'Christine', specialite: 'Histoire', email: 'c.lambert@univ.edu' },
-        { id: 3, nom: 'Roux', prenom: 'Émile', specialite: 'Physique', email: 'e.roux@univ.edu' }
-    ];
+    const [enseignants, setEnseignants] = useState([]);
 
-    const handleAdd = () => {
-        console.log('Ajouter');
+    useEffect(() => {
+        fetchEnseignants();
+    }, []);
+
+    const fetchEnseignants = async () => {
+        await getAllEnseignants((res) => {
+            if (res.status === 200) {
+                console.log(res.data);
+                setEnseignants(res.data);
+            } else {
+                console.error('Failed to fetch enseignants', res.error);
+            }
+        });
     };
 
-    const handleEdit = (id) => {
-        console.log('Modifier', id);
+    const handleAdd = async () => {
+        const newEnseignant = {
+            nom: 'Nouveau',
+            prenom: 'Enseignant',
+            specialite: 'Nouvelle Spécialité',
+            email: 'nouveau.enseignant@univ.edu'
+        };
+        addEnseignant(newEnseignant, () => {
+            fetchEnseignants();
+        });
     };
 
     const handleDelete = (id) => {
-        console.log('Supprimer', id);
+        removeEnseignant(id, () => {
+            fetchEnseignants();
+        });
     };
 
     return (
@@ -39,21 +57,21 @@ function Enseignants() {
                 <tr>
                     <th className="th">Nom</th>
                     <th className="th">Prénom</th>
-                    <th className="th">Spécialité</th>
-                    <th className="th">Email</th>
+                    <th className="th">Enseignement</th>
+                    <th className="th">Matiere</th>
                     <th className="th">Actions</th>
                 </tr>
                 </thead>
                 <tbody>
                 {enseignants.map(enseignant => (
-                    <tr key={enseignant.id}>
-                        <td className="td">{enseignant.nom}</td>
-                        <td className="td">{enseignant.prenom}</td>
-                        <td className="td">{enseignant.specialite}</td>
-                        <td className="td">{enseignant.email}</td>
+                    <tr key={enseignant._id}>
+                        <td className="td">{enseignant.NomEns}</td>
+                        <td className="td">{enseignant.PrenomEns}</td>
+                        <td className="td">{enseignant.GradeEns}</td>
+                        <td className="td">{enseignant.CodeMat}</td>
                         <td className="td">
-                            <button onClick={() => handleEdit(enseignant.id)} className="button">Modifier</button>
-                            <button onClick={() => handleDelete(enseignant.id)} className="button">Supprimer</button>
+                            <button className="button">Modifier</button>
+                            <button onClick={() => handleDelete(enseignant._id)} className="button">Supprimer</button>
                         </td>
                     </tr>
                 ))}

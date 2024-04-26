@@ -1,47 +1,25 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:4000/api/matieres'; // Assurez-vous que l'URL est correcte
-
-// Obtenir toutes les matières
-export const getAllMatieres = async () => {
-    try {
-        const response = await axios.get(API_URL);
-        return response.data;
-    } catch (error) {
-        console.error("Error fetching subjects", error);
-        throw error;
-    }
+export const getAllMatieres = (callback) => {
+    axios.get('http://localhost:4000/matieres')
+        .then(res => callback(res))
+        .catch(err => callback(err));
 }
 
-// Ajouter une nouvelle matière
-export const addMatiere = async (matiere) => {
-    try {
-        const response = await axios.post(API_URL, matiere);
-        return response.data;
-    } catch (error) {
-        console.error("Error adding subject", error);
-        throw error;
-    }
+export const addMatiere = (matiere, callback) => {
+    axios.post('http://localhost:4000/matieres', matiere)
+        .then(res => callback(res))
+        .catch(err => callback(err));
 }
 
-// Mettre à jour une matière
-export const updateMatiere = async (id, matiere) => {
-    try {
-        const response = await axios.put(`${API_URL}/${id}`, matiere);
-        return response.data;
-    } catch (error) {
-        console.error("Error updating subject", error);
-        throw error;
-    }
+export const updateMatiere = (id, matiere, callback) => {
+    axios.put(`http://localhost:4000/matieres/${id}`, matiere)
+        .then(res => callback(res))
+        .catch(err => callback(err));
 }
 
-// Supprimer une matière
-export const deleteMatiere = async (id) => {
-    try {
-        const response = await axios.delete(`${API_URL}/${id}`);
-        return response.data;
-    } catch (error) {
-        console.error("Error deleting subject", error);
-        throw error;
-    }
+export const removeMatiere = (id, callback) => {
+    axios.delete(`http://localhost:4000/matieres/${id}`)
+        .then(res => callback(res))
+        .catch(err => callback(err));
 }

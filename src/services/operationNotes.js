@@ -1,47 +1,22 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:4000/api/notes'; // Assurez-vous que l'URL est correcte
-
-// Obtenir toutes les notes
-export const getAllNotes = async () => {
-    try {
-        const response = await axios.get(API_URL);
-        return response.data;
-    } catch (error) {
-        console.error("Error fetching notes", error);
-        throw error;
-    }
+export const getAllNotes = (callback) => {
+    axios.get('http://localhost:4000/notes ').then((res) => callback(res))
 }
 
-// Ajouter une nouvelle note
-export const addNote = async (note) => {
-    try {
-        const response = await axios.post(API_URL, note);
-        return response.data;
-    } catch (error) {
-        console.error("Error adding note", error);
-        throw error;
-    }
+export const addNote = (note, callback) => {
+    axios.post('http://localhost:4000/notes', note)
+        .then((res) => callback(res))
+        .catch((err) => callback(err));
 }
 
-// Mettre à jour une note
-export const updateNote = async (id, note) => {
-    try {
-        const response = await axios.put(`${API_URL}/${id}`, note);
-        return response.data;
-    } catch (error) {
-        console.error("Error updating note", error);
-        throw error;
-    }
+export const updateNote = (id, note, callback) => {
+    axios.put(`http://localhost:4000/notes/${id}`, note)
+        .then(res => callback(res))
+        .catch(err => callback(err));
 }
 
-// Supprimer une note
-export const deleteNote = async (id) => {
-    try {
-        const response = await axios.delete(`${API_URL}/${id}`);
-        return response.data;
-    } catch (error) {
-        console.error("Error deleting note", error);
-        throw error;
-    }
+export const removeNote = (id, callback) => {
+    axios.delete(`http://localhost:4000/notes/${id}`).then((res) => callback(res))
+        .catch((err) => callback(err));
 }
