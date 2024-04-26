@@ -89,8 +89,6 @@ app.delete("/etudiants/:id", async (req, res) => {
     }
 });
 
-
-
 app.get("/notes", async (req, res) => {
     try {
         const results = await Note.find({});

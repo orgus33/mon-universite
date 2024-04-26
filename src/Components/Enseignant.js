@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import '../styles.css';
 import {getAllEnseignants, addEnseignant, removeEnseignant, updateEnseignant} from '../services/operationEnseignants';
-import EnseignantModal from "../modals/EnseignantModal"; // Adjust import paths as necessary
+import EnseignantModal from "../modals/EnseignantModal";
 
 function Enseignants() {
     const [enseignants, setEnseignants] = useState([]);
