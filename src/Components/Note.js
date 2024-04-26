@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import '../styles.css';
-import { getAllNotes, addNote, removeNote } from '../services/operationNotes.js'; // Ensure the path is correctly set
+import { getAllNotes, addNote, removeNote, updateNote } from '../services/operationNotes.js';
+import NoteModal from "../modals/NoteModal";
 
 function Notes() {
     const [notes, setNotes] = useState([]);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [currentNote, setCurrentNote] = useState(null);
 
     useEffect(() => {
         fetchNotes();
@@ -22,21 +25,43 @@ function Notes() {
     };
 
     const handleAdd = async () => {
-        const newNote = {
-            etudiantNom: 'Nouvel Étudiant',
-            matiere: 'Nouvelle Matière',
-            note: 10,
-            date: new Date()
-        };
-        addNote(newNote, () => {
-            fetchNotes();
+        setCurrentNote({
+            NEtudiant: '',
+            CodeMat: '',
+            Note: '',
+            Date: new Date().toISOString().split('T')[0]
+        })
+        setIsModalOpen(true);
+    };
+
+    const handleEdit = (note) => {
+        setCurrentNote({
+            _id: note._id,
+            NEtudiant: note.NEtudiant,
+            CodeMat: note.CodeMat,
+            Note: note.Note,
+            Date: new Date(note.Date).toISOString().split('T')[0]
         });
+        setIsModalOpen(true);
     };
 
     const handleDelete = (id) => {
         removeNote(id, () => {
             fetchNotes();
         });
+    };
+
+    const handleSubmit = (note) => {
+        if (note._id) {
+            updateNote(note._id, note, () => {
+                fetchNotes();
+            });
+        } else {
+            addNote(note, () => {
+                fetchNotes();
+            });
+        }
+        setIsModalOpen(false);
     };
 
     return (
@@ -65,18 +90,26 @@ function Notes() {
                 <tbody>
                 {notes.map(note => (
                     <tr key={note._id}>
-                        <td className="td">{note["Prénom"] + note.Nom}</td>
-                        <td className="td">{note.matiere}</td>
-                        <td className="td">{note.note}</td>
-                        <td className="td">{new Date(note.date).toLocaleDateString('fr-FR')}</td>
+                        <td className="td">{note.NEtudiant}</td>
+                        <td className="td">{note.CodeMat}</td>
+                        <td className="td">{note.Note}</td>
+                        <td className="td">{new Date(note.Date).toLocaleDateString('fr-FR')}</td>
                         <td className="td">
-                            <button className="button">Modifier</button>
+                            <button onClick={() => handleEdit(note)} className="button">Modifier</button>
                             <button onClick={() => handleDelete(note._id)} className="button">Supprimer</button>
                         </td>
                     </tr>
                 ))}
                 </tbody>
             </table>
+
+            <NoteModal
+                isOpen={isModalOpen}
+                handleClose={() => setIsModalOpen(false)}
+                handleSubmit={handleSubmit}
+                noteData={currentNote}
+                setNoteData={setCurrentNote}
+            />
         </div>
     );
 }

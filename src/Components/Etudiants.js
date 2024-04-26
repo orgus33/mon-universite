@@ -1,10 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import '../styles.css';
-import {add, getAll, remove} from "../services/operationsEtuds";
+import { getAllEtud, removeEtud, updateEtud, addEtud} from "../services/operationsEtuds";
+import EtudiantModal from "../modals/EtudiantModal";
+
 
 function Etudiants() {
     const [etudiants, setEtudiants] = useState([]);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [currentEtudiant, setCurrentEtudiant] = useState(null);
 
     useEffect(() => {
         fetchEtudiants();
@@ -15,45 +19,50 @@ function Etudiants() {
     }, [etudiants]);
 
     const fetchEtudiants = async () => {
-        await getAll((res) => {
+        await getAllEtud((res) => {
             setEtudiants(res.data)
         })
     };
 
     const handleAdd = async () => {
-
-        const newStudent = {
-            NumEtudiant: etudiants.length !== 0 ? (parseInt([...etudiants].pop().NumEtudiant) + 1) : 1,
-            Nom: 'Nouveau',
-            Prenom: 'Étudiant',
-        };
-        add(newStudent, () => {
-            fetchEtudiants()
-        })
+        setCurrentEtudiant({
+            NumEtudiant: '',
+            Nom: '',
+            Prenom: '',
+            datenEt: new Date().toISOString().split('T')[0]
+        });
+        setIsModalOpen(true);
     };
-    //
-    // const handleEdit = async (id) => {
-    //     const studentToUpdate = etudiants.find(e => e.id === id);
-    //     const updatedData = {...studentToUpdate, nom: studentToUpdate.nom + ' Modifié'};
-    //     try {
-    //         const updated = await updateEtudiant(id, updatedData);
-    //         const index = etudiants.findIndex(e => e.id === id);
-    //         const updatedEtudiants = [...etudiants];
-    //         updatedEtudiants[index] = updated;
-    //         setEtudiants(updatedEtudiants);
-    //     } catch (error) {
-    //         console.error('Failed to update student', error);
-    //     }
-    // };
-    //
-    // const handleDelete = async (id) => {
-    //     try {
-    //         await deleteEtudiant(id);
-    //         setEtudiants(etudiants.filter(etudiant => etudiant.id !== id));
-    //     } catch (error) {
-    //         console.error('Failed to delete student', error);
-    //     }
-    // };
+
+   const handleEdit = (etudiant) => {
+       setCurrentEtudiant({
+           _id: etudiant._id,
+           NumEtudiant: etudiant.NumEtudiant,
+           Prenom: etudiant.Prenom,
+           Nom: etudiant.Nom,
+           datenEt: new Date(etudiant.datenEt).toISOString().split('T')[0]
+       })
+       setIsModalOpen(true);
+   }
+
+   const handleDelete = (etudiant) => {
+       removeEtud(etudiant._id, ()=> {
+           fetchEtudiants()
+       })
+   }
+
+    const handleSubmit = (etudiant) => {
+        if (etudiant._id) {
+            updateEtud(etudiant._id, etudiant, () => {
+                fetchEtudiants();
+            });
+        } else {
+            addEtud(etudiant, () => {
+                fetchEtudiants();
+            });
+        }
+        setIsModalOpen(false);
+    };
 
     return (
         <div className="container">
@@ -71,8 +80,9 @@ function Etudiants() {
             <table className="table">
                 <thead>
                 <tr>
-                    <th className="th">Nom</th>
+                    <th className="th">Numéro</th>
                     <th className="th">Prénom</th>
+                    <th className="th">Nom</th>
                     <th className="th">Date de Naissance</th>
                     <th className="th">Actions</th>
                 </tr>
@@ -80,21 +90,25 @@ function Etudiants() {
                 <tbody>
                 {etudiants.map((etudiant, index) => (
                     <tr key={index}>
-                        <td className="td">{etudiant.Nom}</td>
-                        <td className="td">{etudiant["Prénom"]}</td>
+                        <td className="td">{etudiant.NumEtudiant}</td>
+                        <td className="td">{etudiant.Prenom }</td>
+                        <td className="td">{etudiant.Nom }</td>
                         <td className="td">{new Date(etudiant.datenEt).toLocaleDateString('fr-FR')}</td>
                         <td className="td">
-                            <button className="button">Modifier</button>
-                            <button onClick={() => {
-                                remove(etudiant._id, ()=> {
-                                    fetchEtudiants()
-                                })
-                            }} className="button">Supprimer</button>
+                            <button onClick={() => handleEdit(etudiant)} className="button">Modifier</button>
+                            <button onClick={() => handleDelete(etudiant)} className="button">Supprimer</button>
                         </td>
                     </tr>
                 ))}
                 </tbody>
             </table>
+            <EtudiantModal
+                isOpen={isModalOpen}
+                handleClose={() => setIsModalOpen(false)}
+                handleSubmit={handleSubmit}
+                etudiantData={currentEtudiant}
+                setEtudiantData={setCurrentEtudiant}
+            />
         </div>
     );
 }

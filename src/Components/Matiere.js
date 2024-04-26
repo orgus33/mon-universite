@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import '../styles.css';
-import { getAllMatieres, addMatiere, updateMatiere, removeMatiere } from '../services/operationMatieres'; // Adjust import paths as necessary
+import { getAllMatieres, addMatiere, updateMatiere, removeMatiere } from '../services/operationMatieres';
+import MatiereModal from "../modals/MatiereModal";
 
 function Matiere() {
     const [matieres, setMatieres] = useState([]);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [currentMatiere, setCurrentMatiere] = useState(null);
 
     useEffect(() => {
         fetchMatieres();
@@ -18,20 +21,37 @@ function Matiere() {
     };
 
     const handleAdd = async () => {
-        const newMatiere = {
-            code: 'NEW101',
-            titre: 'Nouvelle Matière',
-            coefficient: 1.0
-        };
-        addMatiere(newMatiere, () => {
-            fetchMatieres();
-        });
+        setCurrentMatiere({
+            CodeMat: "",
+            CoeffMat: 0,
+            LibelleMat: ""
+        })
+        setIsModalOpen(true)
     };
+
+    const handleEdit = (matiere) => {
+        console.log(matiere)
+        setCurrentMatiere(matiere);
+        setIsModalOpen(true)
+    }
 
     const handleDelete = (id) => {
         removeMatiere(id, () => {
             fetchMatieres();
         });
+    };
+
+    const handleSubmit = (matiere) => {
+        if (matiere._id) {
+            updateMatiere(matiere._id, matiere, () => {
+                fetchMatieres();
+            });
+        } else {
+            addMatiere(matiere, () => {
+                fetchMatieres();
+            });
+        }
+        setIsModalOpen(false);
     };
 
     return (
@@ -63,13 +83,20 @@ function Matiere() {
                         <td className="td">{matiere.LibelleMat}</td>
                         <td className="td">{matiere.CoeffMat}</td>
                         <td className="td">
-                            <button className="button">Modifier</button>
+                            <button onClick={() => handleEdit(matiere)} className="button">Modifier</button>
                             <button onClick={() => handleDelete(matiere._id)} className="button">Supprimer</button>
                         </td>
                     </tr>
                 ))}
                 </tbody>
             </table>
+            <MatiereModal
+                isOpen={isModalOpen}
+                handleClose={() => setIsModalOpen(false)}
+                handleSubmit={handleSubmit}
+                matiereData={currentMatiere}
+                setMatiereData={setCurrentMatiere}
+            />
         </div>
     );
 }
