@@ -14,7 +14,7 @@ const NoteModal = ({ isOpen, handleClose, handleSubmit, noteData, setNoteData })
             }}>
                 <div>
                     <label>Étudiant:</label>
-                    <input type="text" name="NEtudiant" value={noteData.NEtudiant} onChange={handleChange} required />
+                    <input type="text" name="NumEtudiant" value={noteData.NumEtudiant} onChange={handleChange} required />
                 </div>
                 <div>
                     <label>Matière:</label>

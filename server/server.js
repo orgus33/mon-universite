@@ -26,7 +26,7 @@ let EtudSchema = new Schema({
 let NoteSchema = new Schema({
     CodeMat: String,
     Date: Date,
-    NEtudiant: String,
+    NumEtudiant: String,
     Note: Number
 }, {versionKey: false})
 

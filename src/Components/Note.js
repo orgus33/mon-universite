@@ -26,7 +26,7 @@ function Notes() {
 
     const handleAdd = async () => {
         setCurrentNote({
-            NEtudiant: '',
+            NumEtudiant: '',
             CodeMat: '',
             Note: '',
             Date: new Date().toISOString().split('T')[0]
@@ -37,7 +37,7 @@ function Notes() {
     const handleEdit = (note) => {
         setCurrentNote({
             _id: note._id,
-            NEtudiant: note.NEtudiant,
+            NumEtudiant: note.NumEtudiant,
             CodeMat: note.CodeMat,
             Note: note.Note,
             Date: new Date(note.Date).toISOString().split('T')[0]
@@ -90,7 +90,7 @@ function Notes() {
                 <tbody>
                 {notes.map(note => (
                     <tr key={note._id}>
-                        <td className="td">{note.NEtudiant}</td>
+                        <td className="td">{note.NumEtudiant}</td>
                         <td className="td">{note.CodeMat}</td>
                         <td className="td">{note.Note}</td>
                         <td className="td">{new Date(note.Date).toLocaleDateString('fr-FR')}</td>
