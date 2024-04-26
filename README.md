@@ -1,70 +1,29 @@
-# Getting Started with Create React App
+# Système de Gestion Universitaire
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Ce projet est un système de gestion universitaire complet conçu pour faciliter la gestion des élèves, des enseignants, des notes et des matières. Réalisé avec des technologies web modernes, l'application assure une expérience utilisateur fluide et une fonctionnalité robuste côté serveur.
 
-## Available Scripts
+## Technologies Utilisées
 
-In the project directory, you can run:
+- Front-end : Le côté client est développé avec React, une puissante bibliothèque JavaScript pour construire des interfaces utilisateur. L'architecture basée sur les composants de React rend l'application scalable et facile à maintenir.
+- Back-end : Le côté serveur est alimenté par Express.js, un framework d'application web minimal et flexible pour Node.js qui offre un ensemble robuste de fonctionnalités pour les applications web et mobiles. Cette configuration permet une gestion efficace des requêtes et une gestion transparente des données.
+- Base de données : MongoDB avec l'ORM Mongoose est utilisé pour le stockage des données. Mongoose offre une solution basée sur des schémas pour modéliser les données de l'application, incluant le casting de type intégré, la validation, la construction de requêtes, et les hooks pour la logique métier.
 
-### `npm start`
+## Fonctionnalités
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- Gestion des élèves : Permet d'ajouter, de modifier et de supprimer des enregistrements d'élèves. Les informations de chaque élève, telles que leur identifiant, nom et date de naissance, peuvent être gérées facilement via une interface conviviale.
+- Gestion des enseignants : Permet l'administration des profils des enseignants, incluant l'ajout de nouveaux enseignants et la modification des entrées existantes. Les informations de chaque enseignant, y compris leur spécialisation et leurs coordonnées, sont facilement accessibles.
+- Gestion des notes : Facilite l'enregistrement et la mise à jour des notes des élèves pour diverses matières. Le système supporte les modifications et les interrogations des dossiers de notes, assurant que les enseignants peuvent facilement suivre les progrès des élèves.
+- Gestion des matières : Offre la capacité d'ajouter et de gérer les détails des matières telles que les codes des matières, les titres et les coefficients, en accord avec les exigences académiques.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### Executer le projet
 
-### `npm test`
+- Clonez le dépôt sur votre machine locale.
+- Naviguez jusqu'au répertoire du projet et installez les dépendances :
+npm install
+- Puis lancer le serveur front-end :
+npm start
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Démarrez le serveur back-end :
+cd server
+npm install
+npm start
