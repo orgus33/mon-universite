@@ -13,7 +13,7 @@ const NoteModal = ({ isOpen, handleClose, handleSubmit, noteData, setNoteData })
                 handleSubmit(noteData);
             }}>
                 <div>
-                    <label>Étudiant Nom:</label>
+                    <label>Étudiant:</label>
                     <input type="text" name="NEtudiant" value={noteData.NEtudiant} onChange={handleChange} required />
                 </div>
                 <div>
